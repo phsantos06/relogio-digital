@@ -2,15 +2,85 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <meta name="author" content="Paulo Henrique">
-  <meta name="description" content="Meu relógio Digital">
-  <title>Relógio Digital</title>
-  <link rel="stylesheet" href="relogio.css">
-  <link rel="icon" href="imagem.jpg">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="author" content="Paulo Henrique" />
+  <meta name="description" content="Relógio digital com data, cronômetro com voltas e temporizador com alarme." />
+  <meta name="theme-color" content="#1a1420" />
+  <title>Relógio Digital — Paulo Henrique</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23ffb35c'/%3E%3Cpath d='M32 16v16l10 6' stroke='%231a1420' stroke-width='5' stroke-linecap='round' fill='none'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="relogio.css" />
 </head>
 <body>
-    <h1 id="relogio">00:00:00</h1>
-    <script src="relogio.js"></script>
+  <div class="bg" aria-hidden="true"></div>
+
+  <main class="panel">
+    <div class="tabs" role="tablist" aria-label="Modos">
+      <button role="tab" id="tab-relogio" aria-controls="relogio" aria-selected="true">Relógio</button>
+      <button role="tab" id="tab-cronometro" aria-controls="cronometro" aria-selected="false" tabindex="-1">Cronômetro</button>
+      <button role="tab" id="tab-timer" aria-controls="timer" aria-selected="false" tabindex="-1">Temporizador</button>
+      <span class="tabs__ink" aria-hidden="true"></span>
+    </div>
+
+    <!-- RELÓGIO -->
+    <section id="relogio" role="tabpanel" aria-labelledby="tab-relogio" class="view">
+      <p class="greet" id="saudacao">Olá</p>
+      <h1 class="digits" aria-live="off"><span id="hora">00:00</span><span class="digits__sec" id="seg">:00</span><span class="ampm" id="ampm"></span></h1>
+      <p class="date" id="data">—</p>
+      <div class="bar" aria-hidden="true"><span id="barra-min"></span></div>
+      <div class="row">
+        <label class="switch"><input type="checkbox" id="formato12" /><span>Formato 12h</span></label>
+        <label class="switch"><input type="checkbox" id="mostrarSeg" checked /><span>Segundos</span></label>
+      </div>
+    </section>
+
+    <!-- CRONÔMETRO -->
+    <section id="cronometro" role="tabpanel" aria-labelledby="tab-cronometro" class="view" hidden>
+      <p class="greet">Cronômetro</p>
+      <p class="digits digits--sw" id="sw-display">00:00<span class="digits__sec">.00</span></p>
+      <div class="actions">
+        <button class="btn btn--primary" id="sw-start">Iniciar</button>
+        <button class="btn" id="sw-lap" disabled>Volta</button>
+        <button class="btn" id="sw-reset" disabled>Zerar</button>
+      </div>
+      <ol class="laps" id="sw-laps" aria-label="Voltas"></ol>
+    </section>
+
+    <!-- TEMPORIZADOR -->
+    <section id="timer" role="tabpanel" aria-labelledby="tab-timer" class="view" hidden>
+      <p class="greet">Temporizador</p>
+      <div class="ring">
+        <svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="54" class="ring__track" /><circle cx="60" cy="60" r="54" class="ring__fill" id="tm-ring" /></svg>
+        <p class="digits digits--timer" id="tm-display" aria-live="polite">05:00</p>
+      </div>
+      <div class="presets" aria-label="Tempos rápidos">
+        <button class="chip" data-min="1">1 min</button>
+        <button class="chip is-on" data-min="5">5 min</button>
+        <button class="chip" data-min="10">10 min</button>
+        <button class="chip" data-min="25">25 min</button>
+      </div>
+      <form class="custom" id="tm-form">
+        <label>Min <input type="number" id="tm-min" min="0" max="999" value="5" inputmode="numeric" /></label>
+        <label>Seg <input type="number" id="tm-sec" min="0" max="59" value="0" inputmode="numeric" /></label>
+        <button class="btn btn--ghost" type="submit">Definir</button>
+      </form>
+      <div class="actions">
+        <button class="btn btn--primary" id="tm-start">Iniciar</button>
+        <button class="btn" id="tm-reset">Zerar</button>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <button class="icon-btn" id="tela-cheia" aria-label="Tela cheia" title="Tela cheia (F)">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
+      </button>
+      <span class="hint">Espaço inicia/pausa · F tela cheia</span>
+    </footer>
+  </main>
+
+  <p class="toast" id="toast" role="status" hidden>⏰ Tempo esgotado!</p>
+  <script src="relogio.js"></script>
 </body>
 </html>
